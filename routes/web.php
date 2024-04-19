@@ -47,11 +47,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/role/{id}/update', [App\Http\Controllers\RoleController::class, 'update'])->name('role.update');
     Route::get('/role/create', [App\Http\Controllers\RoleController::class, 'create'])->name('role.create');
     Route::post('/role/store', [App\Http\Controllers\RoleController::class, 'store'])->name('role.store');
+    Route::post('/role/updatepermissions', [App\Http\Controllers\RoleController::class, 'updaetPermissions'])->name('role.updatepermissions');
+
+
 
 
     Route::get('/permissions', [App\Http\Controllers\PermissionController::class, 'index'])->name('permissions.index');
     Route::get('/permission/create', [App\Http\Controllers\PermissionController::class, 'create'])->name('permission.create');
     Route::post('/permission/store', [App\Http\Controllers\PermissionController::class, 'store'])->name('permission.store');
+    Route::post('/permission/assignole', [App\Http\Controllers\PermissionController::class, 'assignRole'])->name('permission.assignrole');
 
     Route::get('/get-permissions', function () {
         return auth()->check()?auth()->user()->jsPermissions():0;

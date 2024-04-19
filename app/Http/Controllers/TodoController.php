@@ -25,9 +25,9 @@ class TodoController extends Controller
                 'todos' => $todos,
                 'can' => [
 
-                        'view' => Auth::user()->can('view articles'),
-                        'edit' => Auth::user()->can('edit articles'),
-                        'delete' => Auth::user()->can('delete articles'),
+                    'view' => Auth::user()->can('view articles'),
+                    'edit' => Auth::user()->can('edit articles'),
+                    'delete' => Auth::user()->can('delete articles'),
                 ]
             ]
         );

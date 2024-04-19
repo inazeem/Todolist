@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Redirect;
@@ -15,8 +17,9 @@ class RoleController extends Controller
 
     public function index(){
 
-        $roles = Role::all();
-        return inertia::render('Roles/Index',compact('roles'));
+        $roles = Role::with('permissions')->get();
+        $permissions = Permission::all();
+        return inertia::render('Roles/Index',compact('roles','permissions'));
 
     }
 
@@ -65,7 +68,13 @@ class RoleController extends Controller
         $roles = Role::all();
         //return redirect('/roles')->with('message', 'Role Updated Successfully');
         return redirect::route('roles.index')->with(['message' =>  'Role Updated Successfully.','class' => 'p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800']);
+    }
 
+    public function updaetPermissions(Request $request){
+
+        $role = Role::find($request->role);
+        $role->syncPermissions($request->permission1);
+        return redirect('/roles')->with('message', 'Permissions Updated Successfully');
     }
 
     public function destroy($rid){

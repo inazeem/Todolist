@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Role;
-use App\Models\Permission;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Redirect;
+use Spatie\Permission\PermissionRegistrar;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PermissionController extends Controller
 {
@@ -16,7 +17,8 @@ class PermissionController extends Controller
     public function index(){
 
         $permissions = Permission::all();
-        return inertia::render('Permissions/Index',compact('permissions'));
+        $roles = Role::all();
+        return inertia::render('Permissions/Index',compact('permissions','roles'));
 
     }
 
@@ -40,5 +42,24 @@ class PermissionController extends Controller
 
 
         return Redirect::route('permissions.index');
+    }
+
+    public function assignRole(Request $request){
+
+        //return $request;
+        $roles = $request->role454;
+        $permission = Permission::find($request->pid);
+
+       // return $permission;
+
+        foreach($roles as $role){
+            $role = Role::find($role);
+
+            //return $role;
+            $role->givePermissionTo($permission->name);
+        }
+
+        return Redirect::route('permissions.index')->with('message','Permissions assigned to roles successfully!');
+
     }
 }
