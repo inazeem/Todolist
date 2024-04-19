@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users');
+    Route::get('/users/create', [App\Http\Controllers\UserController::class, 'create'])->name('user.create');
     Route::get('/todos', [App\Http\Controllers\TodoController::class, 'index'])->name('todos');
     Route::post('/todos/store', [App\Http\Controllers\TodoController::class, 'store'])->name('todos.store');
     Route::put('/todos/{todo}/update', [App\Http\Controllers\TodoController::class, 'update'])->name('todos.update');

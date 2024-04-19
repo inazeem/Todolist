@@ -39,6 +39,11 @@ const showingNavigationDropdown = ref(false);
                                     Todos
                                 </NavLink>
                             </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink :href="route('users')" :active="route().current('users')">
+                                    Users
+                                </NavLink>
+                            </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -141,6 +146,7 @@ const showingNavigationDropdown = ref(false);
                             <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('roles.index')"> Roles </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('permissions.index')"> Permissions </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('users')"> users </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                                 Log Out
                             </ResponsiveNavLink>

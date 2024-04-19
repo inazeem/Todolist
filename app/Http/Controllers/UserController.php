@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
     public function index(){
 
-        return User::all();
+        $users =  User::with('roles')->get();
+        return inertia::render('Users/Index',compact('users'));
 
     }
 }
