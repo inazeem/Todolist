@@ -6,16 +6,47 @@ import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 
+
+let currUser = ref('');
 //Props & Emit
 const props = defineProps({
     users:{
         type:Object,
         default:({}),
-    }
+    },
+    roles:{
+        type:Object,
+        default:({}),
+    },
+});
 
+const form = useForm({
+    uid : ref(''),
+    userRoles: [],
 });
 
 
+const assigingUserRoles = ref(false);
+const assignUserRoles = (user) =>{
+    assigingUserRoles.value = true;
+    currUser = ref(user);
+    form.uid = user.id;
+}
+
+const closeModal = () => {
+    assigingUserRoles.value = false;
+    form.reset();
+};
+
+
+const assigningUserRoles = () => {
+    form.post(route('user.updateroles'), {
+        form,
+        preserveScroll: true,
+        onSuccess: () => closeModal(),
+        onFinish: () => form.reset(),
+    });
+}
 
 
 
@@ -71,7 +102,45 @@ const props = defineProps({
                                     {{ user.name }}
                                 </td>
                                 <td class="px-6 py-4 max-w-[40px] text-sm font-medium text-gray-900 ">
+                                    <button  @click="assignUserRoles(user)" class="inline-flex items-center px-3 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150" fdprocessedid="nwhhb">Assign Roles</button> &nbsp;
+                                    <Modal :show="assigingUserRoles" @close="closeModal">
+                                        <div class="p-6">
+                                            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                                Are you sure you want to delete your account?
+                                            </h2>
 
+                                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                                Once your account is deleted, all of its resources and data will be permanently deleted. Please
+                                                enter your password to confirm you would like to permanently delete your account.
+                                            </p>
+
+                                            <div class="mt-3 w-1/4 ">
+                                                <div v-for="urole of currUser.roles" :key="urole.id"  class="flex items-center mt-2">
+                                                    <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{urole.name}}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-3 w-1/4 ">
+                                                <label v-for="role of roles" :key="role.id"  class="flex items-center mt-2">
+                                                    <Checkbox name="userRoles" :id="role.name " v-model:checked="form.userRoles" :value="role.name" />
+                                                    <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{role.name}}</span>
+                                                </label>
+                                            </div>
+
+                                            <div class="mt-6 flex justify-end">
+                                                <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+
+                                                <SecondaryButton
+                                                    class="ms-3"
+                                                    :class="{ 'opacity-25': form.processing }"
+                                                    :disabled="form.processing"
+                                                    @click="assigningUserRoles"
+                                                >
+                                                    Assign Roles
+                                                </SecondaryButton>
+                                            </div>
+                                        </div>
+                                    </Modal>
                                     <Link :href="'/role/'+user.id+'/edit'" class="inline-flex items-center px-3 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">Edit </Link>&nbsp;
                                     <Link :href="'/role/'+user.id+'/delete'" class="inline-flex items-center px-3 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">Delete </Link>
 

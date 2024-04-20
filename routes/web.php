@@ -36,6 +36,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users');
     Route::get('/users/create', [App\Http\Controllers\UserController::class, 'create'])->name('user.create');
+    Route::post('/users/store', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
+    Route::post('/users/updateroles', [App\Http\Controllers\UserController::class, 'updateRoles'])->name('user.updateroles');
+
+
+
     Route::get('/todos', [App\Http\Controllers\TodoController::class, 'index'])->name('todos');
     Route::post('/todos/store', [App\Http\Controllers\TodoController::class, 'store'])->name('todos.store');
     Route::put('/todos/{todo}/update', [App\Http\Controllers\TodoController::class, 'update'])->name('todos.update');
