@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\App;
 
 use App\Models\Todo;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Auth;
+use App\Http\Controllers\Controller;
 
 class TodoController extends Controller
 {
@@ -20,7 +21,7 @@ class TodoController extends Controller
         $roles = auth()->user()->roles;
 
         $todos = Todo::where('user_id', auth()->user()->id)->get();
-        return inertia::render('App/Todos/Index',
+        return inertia::render('Todos/Index',
             [
                 'todos' => $todos,
                 'can' => [
@@ -60,7 +61,7 @@ class TodoController extends Controller
 
         Todo::create($todo);
 
-        return redirect('app/todos');
+        return redirect('todos');
     }
 
     /**
@@ -92,7 +93,7 @@ class TodoController extends Controller
 
         $todo->is_done = ($todo->is_done)? false : true;
         $todo->save();
-        return redirect('app/todos');
+        return redirect('todos');
     }
 
 
@@ -109,7 +110,7 @@ class TodoController extends Controller
 
         $todo->task = $request->task;
         $todo->save();
-        return redirect('app/todos');
+        return redirect('todos');
     }
 
     /**
@@ -123,6 +124,6 @@ class TodoController extends Controller
          */
 
         $todo->delete();
-        return redirect('app/todos');
+        return redirect('todos');
     }
 }

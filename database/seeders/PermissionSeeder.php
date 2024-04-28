@@ -55,7 +55,7 @@ class PermissionSeeder extends Seeder
 
         $user = \App\Models\User::factory()->create([
             'name' => 'Writer User',
-            'email' => 'naseem@iiadigital.co.uk',
+            'email' => 'writer@iiadigital.co.uk',
         ]);
         $user->assignRole($role1);
 

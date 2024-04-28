@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\App;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Redirect;
 use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
 
 class PermissionController extends Controller
 {
@@ -18,14 +19,14 @@ class PermissionController extends Controller
 
         $permissions = Permission::all();
         $roles = Role::all();
-        return inertia::render('App/Permissions/Index',compact('permissions','roles'));
+        return inertia::render('Permissions/Index',compact('permissions','roles'));
 
     }
 
 
     public function Create(){
 
-        return inertia::render('App/Permissions/Create');
+        return inertia::render('Permissions/Create');
 
     }
 
@@ -37,10 +38,11 @@ class PermissionController extends Controller
 
         $permission = new Permission;
         $permission->name = $validated_data['name'];
-        $permission->guard_name = 'web';
+        $permission->guard_name = $validated_data['name'];
         $permission->save(); //insert
-        return redirect('/app/permissions')->with(['message' =>  'Permission created Successfully.','class' => 'p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800']);
 
+
+        return Redirect::route('permissions.index');
     }
 
     public function assignRole(Request $request){
@@ -58,6 +60,7 @@ class PermissionController extends Controller
             $role->givePermissionTo($permission->name);
         }
 
-        return redirect('/app/permissions')->with(['message' =>  'Permissions assigned to roles successfully!','class' => 'p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800']);
+        return Redirect::route('permissions.index')->with('message','Permissions assigned to roles successfully!');
+
     }
 }

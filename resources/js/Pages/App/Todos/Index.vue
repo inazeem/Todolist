@@ -27,11 +27,11 @@ const submit = () => {
 };
 
 const updateStatus = (todo) => {
-    form.put('/todos/'+todo.id+'/update');
+    form.put('/app/todos/'+todo.id+'/update');
 }
 
 const deleteTodo = (todo) => {
-    form.delete('/todos/'+todo.id);
+    form.delete('/app/todos/'+todo.id);
 }
 
 const editTask = (todo) => {
@@ -43,7 +43,7 @@ const editTask = (todo) => {
 const updateTask = () => {
 
     console.log(todo_id);
-    form.put('/todos/'+todo_id+'/updatetask');
+    form.put('/app/todos/'+todo_id+'/updatetask');
     form.task = '';
     show_upt_btn = false;
 }

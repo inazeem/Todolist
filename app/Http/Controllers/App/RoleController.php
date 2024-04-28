@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\App;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\PermissionRegistrar;
@@ -10,6 +10,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\Controller;
 
 class RoleController extends Controller
 {
@@ -19,14 +20,14 @@ class RoleController extends Controller
 
         $roles = Role::with('permissions')->get();
         $permissions = Permission::all();
-        return inertia::render('App/Roles/Index',compact('roles','permissions'));
+        return inertia::render('Roles/Index',compact('roles','permissions'));
 
     }
 
 
     public function Create(){
 
-        return inertia::render('App/Roles/Create');
+        return inertia::render('Roles/create');
 
     }
 
@@ -40,13 +41,16 @@ class RoleController extends Controller
         $role->name = $validated_data['name'];
         $role->guard_name = $validated_data['name'];
         $role->save(); //insert
-        return redirect('/app/roles')->with(['message' =>  'Role Created Successfully.','class' => 'p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800']);
+
+
+        return Redirect::route('roles.index')->with('message', 'Role Created Successfully');
+        //return redirect('/roles')->with('message', 'Role Updated Successfully');
     }
 
     public function edit($rid){
 
         $role = Role::find($rid);
-        return inertia::render('App/Roles/Edit',compact('role'));
+        return inertia::render('Roles/edit',compact('role'));
     }
 
     public function update(Request $request ){
@@ -59,12 +63,12 @@ class RoleController extends Controller
 
         $role = Role::find($validated_data['id']);
         $role->name =  $validated_data['name'];
-        $role->guard_name =  'web';
+        $role->guard_name =  $validated_data['name'];
         $role->save(); //insert
 
         $roles = Role::all();
-        //return redirect('/app/roles')->with('message', 'Role Updated Successfully');
-        return redirect('/app/roles')->with(['message' =>  'Role Updated Successfully.','class' => 'p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800']);
+        //return redirect('/roles')->with('message', 'Role Updated Successfully');
+        return redirect::route('roles.index')->with(['message' =>  'Role Updated Successfully.','class' => 'p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800']);
     }
 
     public function updaetPermissions(Request $request){
@@ -72,16 +76,15 @@ class RoleController extends Controller
         $role = Role::find($request->role);
         $role->syncPermissions($request->permission1);
 
-        return redirect('roles')->with('message', 'Permissions Updated Successfully');
+        return redirect('/roles')->with('message', 'Permissions Updated Successfully');
     }
 
     public function destroy($rid){
 
-        return $rid;
         $role = Role::find($rid);
         $role->delete();
         sleep(1);
 
-        return redirect('roles')->with('message', 'Role Deleted Successfully');
+        return redirect('/roles')->with('message', 'Role Deleted Successfully');
     }
 }
